@@ -1,0 +1,11 @@
+[book]
+authors = ["Daniel Samson"]
+language = "en"
+multilingual = false
+src = "doc-src"
+title = "Paginate"
+
+
+[build]
+build-dir = "docs"
+create-missing = false
