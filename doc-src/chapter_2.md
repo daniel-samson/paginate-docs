@@ -6,6 +6,11 @@
 use mysql::*;
 use mysql::prelude::*;
 
+
+struct Count {
+    total: usize
+}
+
 #[derive(Debug, PartialEq, Eq)]
 struct Payment {
     customer_id: i32,
