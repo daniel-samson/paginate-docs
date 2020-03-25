@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Introduction - Paginate</title>
+        <title>Examples - Paginate</title>
         
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="expanded "><a href="chapter_1.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="expanded "><a href="chapter_2.html"><strong aria-hidden="true">2.</strong> Examples</a></li></ol>
+                <ol class="chapter"><li class="expanded "><a href="chapter_1.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="expanded "><a href="chapter_2.html" class="active"><strong aria-hidden="true">2.</strong> Examples</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -148,20 +148,57 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#introduction" id="introduction">Introduction</a></h1>
-<p>Paginate provides a framework agnostic pagination crate, that is especially suited for databases, collections and web pages.</p>
-<p>Also see <a href="https://docs.rs/paginate/1.0.1/paginate/">API Documentation</a></p>
+                        <h1><a class="header" href="#examples" id="examples">Examples</a></h1>
+<h3><a class="header" href="#mysql-database" id="mysql-database">MySQL Database</a></h3>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>use mysql::*;
+use mysql::prelude::*;
+
+#[derive(Debug, PartialEq, Eq)]
+struct Payment {
+    customer_id: i32,
+    amount: i32,
+    account_name: Option&lt;String&gt;,
+}
+
+let database_url = &quot;mysql://root:password@localhost:3307/db_name&quot;;
+let connection = mysql::Pool::new(database_url).expect(&quot;Unable to connect to database&quot;);
+let count: Vec&lt;Count&gt; = connection.prep_exec(&quot;SELECT COUNT(*) total FROM payments&quot;, ())
+    .map(|res| {
+        res.map(|x| x.unwrap())
+            .map(|row| {
+                let total = mysql::from_row(row);
+                Count {
+                    total
+                }
+            }).collect()
+    }).unwrap();
+
+let total_items = count.first().unwrap().total;
+let items_per_page = 1000;
+let pages = Pages::new(total_items, items_per_page);
+for page in pages.into_iter() {
+    let payments: Vec&lt;Payment&gt; = connection.prep_exec(&quot;SELECT * FROM payments LIMIT ?,?&quot;, (page.start, page.length));
+    for payment in payments.iter() {
+        println!(&quot;Payment amount: {}&quot;, payment.amount);
+    }
+}
+
+<span class="boring">}
+</span></code></pre></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-
-                        
-                            <a rel="next" href="chapter_2.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
+                            <a rel="prev" href="chapter_1.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
                             </a>
+                        
+
                         
 
                         <div style="clear: both"></div>
@@ -171,11 +208,11 @@
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-
-                
-                    <a href="chapter_2.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
+                    <a href="chapter_1.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
                     </a>
+                
+
                 
             </nav>
 
