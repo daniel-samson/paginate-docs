@@ -156,6 +156,11 @@
 </span>use mysql::*;
 use mysql::prelude::*;
 
+
+struct Count {
+    total: usize
+}
+
 #[derive(Debug, PartialEq, Eq)]
 struct Payment {
     customer_id: i32,
@@ -181,6 +186,7 @@ let items_per_page = 1000;
 let pages = Pages::new(total_items, items_per_page);
 for page in pages.into_iter() {
     let payments: Vec&lt;Payment&gt; = connection.prep_exec(&quot;SELECT * FROM payments LIMIT ?,?&quot;, (page.start, page.length));
+    // process payments
     for payment in payments.iter() {
         println!(&quot;Payment amount: {}&quot;, payment.amount);
     }
