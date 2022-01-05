@@ -4,6 +4,6 @@ Paginate provides a framework agnostic pagination crate, that is especially suit
 
 Also see:
 - [Crate](https://crates.io/crates/paginate)
-- [API Documentation](https://docs.rs/paginate/1.0.1/paginate/)
+- [API Documentation](https://docs.rs/paginate/latest/paginate/)
 - [Repository](https://github.com/daniel-samson/paginate)
 - [Documentation Repository](https://github.com/daniel-samson/paginate-docs)
