@@ -1,7 +1,7 @@
 Paginate Book
 ====
 
-Book for [paginate](https://crates.io/crates/paginate) crate.
+Book for the [paginate](https://crates.io/crates/paginate) crate.
 
 ### Building the book
 
